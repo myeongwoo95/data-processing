@@ -39,7 +39,7 @@ public class DataProcessingService {
     private final MetaDesignImagesRepository metaDesignImagesRepository;
 
     private static final String UPD_ID = "vitasoft";
-    private static final String A_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/A" : "/A";
+    private static final String A_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/A" : "/data";
     private static final String EXTRACTED_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/extracted" : "/extracted";
 
     private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/uploads/design_images";
