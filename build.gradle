@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    /* Web */
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
+
+    /* lombok */
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    /* Mysql */
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    /* JPA */
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    /* 압축파일 */
+    implementation 'org.apache.commons:commons-compress:1.21'
+
+    /* jackson */
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+    implementation 'javax.xml.parsers:jaxp-api:1.4.6'
+
+    /* Test */
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
