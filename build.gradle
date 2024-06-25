@@ -40,7 +40,7 @@ dependencies {
 
     /* jackson */
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-    implementation 'javax.xml.parsers:jaxp-api:1.4.6'
+    implementation 'javax.xml.parsers:jaxp-api'
 
     /* Test */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
