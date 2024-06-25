@@ -29,8 +29,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    /* Mysql */
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    /* Maria */
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
 
     /* JPA */
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
