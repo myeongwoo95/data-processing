@@ -12,5 +12,5 @@ spring:
     hibernate:
       ddl-auto: create
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # Entity column naming -> (UserName = user_name)
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # Entity column naming -> (userName = user_name)
 

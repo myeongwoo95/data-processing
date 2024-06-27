@@ -451,7 +451,7 @@ public class DataProcessingService {
                 imgNumber++; // 이미지 번호 증가
 
                 metaDesignImage.setUpdId(UPD_ID);
-                metaDesignImage.setUseYn("Y");
+                metaDesignImage.setUseYn('Y');
 
                 // 'description' 요소 획득
                 Element description = (Element) root.getElementsByTagName("description").item(0);
