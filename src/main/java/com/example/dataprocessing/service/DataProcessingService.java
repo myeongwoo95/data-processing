@@ -40,10 +40,10 @@ public class DataProcessingService {
 
     private static final String UPD_ID = "vitasoft";
     private static final String A_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/A" : "/data";
-    private static final String EXTRACTED_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/extracted" : "/extracted";
+    private static final String EXTRACTED_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/extracted" : "/data/extracted";
 
-    private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/uploads/design_images";
-    private static final String FILE_THUMBNAIL_SAVE_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_thumbnail_image" : "/uploads/design_thumbnail_image";
+    private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/data/uploads/design_images";
+    private static final String FILE_THUMBNAIL_SAVE_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_thumbnail_image" : "/data/uploads/design_thumbnail_image";
 
     // 1. 압축 해제
     public void unzip() {
@@ -51,16 +51,16 @@ public class DataProcessingService {
 
         try {
             // 특정 폴더(A_DIR_PATH) 안의 모든 tar 압축파일을 특정 폴더(EXTRACTED_DIR_PATH) 폴더에 해제
-            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
-                try {
-                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
-                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
-                } catch (IOException e) {
-                    // IOException 발생 시 해당 파일만 스킵
-                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
-                    e.printStackTrace(); // 혹은 로깅
-                }
-            }
+//            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
+//                try {
+//                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
+//                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
+//                } catch (IOException e) {
+//                    // IOException 발생 시 해당 파일만 스킵
+//                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
+//                    e.printStackTrace(); // 혹은 로깅
+//                }
+//            }
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 이름이 "-SUPP"로 끝나는 폴더들을 삭제
             deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
