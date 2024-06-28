@@ -54,7 +54,7 @@ public class DataProcessingService {
 //            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
 //                try {
 //                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
-                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
+//                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
 //                } catch (IOException e) {
 //                    // IOException 발생 시 해당 파일만 스킵
 //                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
@@ -66,7 +66,7 @@ public class DataProcessingService {
 //            deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 모든 하위 폴더를 순회하여 DESIGN 폴더를 찾고 그 폴더안에 zip 파일을 특정경로에 압축을 해제
-//            extractFromSourceFolder(EXTRACTED_DIR_PATH);
+            extractFromSourceFolder(EXTRACTED_DIR_PATH);
 
         } catch (Exception e) {
             // 다른 예외 처리가 필요한 경우 추가
