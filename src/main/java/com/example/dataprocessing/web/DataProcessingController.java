@@ -11,8 +11,13 @@ public class DataProcessingController {
 
     private final DataProcessingService dataProcessingService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "it works!";
+    }
+
     @GetMapping("/unzip")
-    public String step1() {
+    public String unzip() {
         try {
             dataProcessingService.unzip();
         } catch (Exception e) {
@@ -45,7 +50,7 @@ public class DataProcessingController {
     }
 
     @GetMapping("/all")
-    public String test() {
+    public String all() {
         try {
             dataProcessingService.unzip();
             dataProcessingService.filtering();
