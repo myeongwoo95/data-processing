@@ -51,19 +51,19 @@ public class DataProcessingService {
 
         try {
             // 특정 폴더(A_DIR_PATH) 안의 모든 tar 압축파일을 특정 폴더(EXTRACTED_DIR_PATH) 폴더에 해제
-//            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
-//                try {
+            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
+                try {
 //                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
-//                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
-//                } catch (IOException e) {
-//                    // IOException 발생 시 해당 파일만 스킵
-//                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
-//                    e.printStackTrace(); // 혹은 로깅
-//                }
-//            }
+                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
+                } catch (IOException e) {
+                    // IOException 발생 시 해당 파일만 스킵
+                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
+                    e.printStackTrace(); // 혹은 로깅
+                }
+            }
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 이름이 "-SUPP"로 끝나는 폴더들을 삭제
-            deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
+//            deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 모든 하위 폴더를 순회하여 DESIGN 폴더를 찾고 그 폴더안에 zip 파일을 특정경로에 압축을 해제
             extractFromSourceFolder(EXTRACTED_DIR_PATH);
