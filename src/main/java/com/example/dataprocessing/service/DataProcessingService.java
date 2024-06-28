@@ -51,19 +51,19 @@ public class DataProcessingService {
 
         try {
             // 특정 폴더(A_DIR_PATH) 안의 모든 tar 압축파일을 특정 폴더(EXTRACTED_DIR_PATH) 폴더에 해제
-//            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
-//                try {
-//                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
-//                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
-//                } catch (IOException e) {
-//                    // IOException 발생 시 해당 파일만 스킵
-//                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
-//                    e.printStackTrace(); // 혹은 로깅
-//                }
-//            }
+            for (File tarFile : aDir.listFiles((dir, name) -> name.endsWith(".tar"))) {
+                try {
+                    tarFileProcessor.extractTarFile(tarFile.getAbsolutePath(), EXTRACTED_DIR_PATH);
+                    tarFileProcessor.cleanUpExtractedFiles(EXTRACTED_DIR_PATH);
+                } catch (IOException e) {
+                    // IOException 발생 시 해당 파일만 스킵
+                    System.err.println("IOException while processing file: " + tarFile.getAbsolutePath());
+                    e.printStackTrace(); // 혹은 로깅
+                }
+            }
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 이름이 "-SUPP"로 끝나는 폴더들을 삭제
-//            deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
+            deleteFoldersWithSuffix(new File(EXTRACTED_DIR_PATH), "-SUPP");
 
             // 특정 폴더(EXTRACTED_DIR_PATH) 안에서 모든 하위 폴더를 순회하여 DESIGN 폴더를 찾고 그 폴더안에 zip 파일을 특정경로에 압축을 해제
             extractFromSourceFolder(EXTRACTED_DIR_PATH);
@@ -379,7 +379,7 @@ public class DataProcessingService {
                     System.out.println("파일 복사 중 오류가 발생했습니다: " + e.getMessage());
                 }
 
-                metaDesignInfo.setImgPath(FILE_THUMBNAIL_SAVE_PATH + thumbnailFile.getName());
+                metaDesignInfo.setImgPath(FILE_THUMBNAIL_SAVE_PATH + "/" +thumbnailFile.getName());
 
             } else {
                 metaDesignInfo.setImgPath(null);
@@ -462,57 +462,60 @@ public class DataProcessingService {
                 // 'description-of-drawings' 요소 안에 p 태그들 가져오기
                 NodeList pTags = descriptionOfDrawings.getElementsByTagName("p");
 
-                String currentTifFileNumber = getLastCharacter(removeExtension(tifFile.getName()));
-                if(currentTifFileNumber.equals("0")){
-                    metaDesignImage.setViewpoint(7);
-                    metaDesignImage.setViewpointName("중복/추가도면");
-                } else {
+//                String currentTifFileNumber = getLastCharacter(removeExtension(tifFile.getName()));
+//                if(currentTifFileNumber.equals("0")){
+//                    metaDesignImage.setViewpoint(7);
+//                    metaDesignImage.setViewpointName("중복/추가도면");
+//                } else {
+//
+//                    // 반복문을 통해 각 'p' 태그 처리
+//                    for (int i = 0; i < pTags.getLength(); i++) {
+//                        Element pTag = (Element) pTags.item(i);
+//                        String id = pTag.getAttribute("id");
+//                        String num = pTag.getAttribute("num");
+//                        String textContent = pTag.getTextContent().trim(); // 텍스트 내용 가져오기
+//
+//                        num = getLastCharacter(num);
+//
+//                        if(currentTifFileNumber.equals(num)){
+//                            if(textContent.contains("is a perspective")){ // 0, 사시도
+//                                metaDesignImage.setViewpoint(0);
+//                                metaDesignImage.setViewpointName("사시도");
+//
+//                            } else if(textContent.contains("is a front")){ // 1, 정면도
+//                                metaDesignImage.setViewpoint(1);
+//                                metaDesignImage.setViewpointName("정면도");
+//
+//                            } else if(textContent.contains("is a rear") || textContent.contains("is a back")){ // 2, 배면도
+//                                metaDesignImage.setViewpoint(2);
+//                                metaDesignImage.setViewpointName("배면도");
+//
+//                            } else if(textContent.contains("is a left side") || textContent.contains("is a left-side")){ // 3, 촤측면도
+//                                metaDesignImage.setViewpoint(3);
+//                                metaDesignImage.setViewpointName("촤측면도");
+//
+//                            } else if(textContent.contains("is a right side") || textContent.contains("is a right-side")){ // 4, 우측면도
+//                                metaDesignImage.setViewpoint(4);
+//                                metaDesignImage.setViewpointName("우측면도");
+//
+//                            } else if(textContent.contains("is a top")){ // 5, 평면도
+//                                metaDesignImage.setViewpoint(5);
+//                                metaDesignImage.setViewpointName("평면도");
+//
+//                            } else if(textContent.contains("is a bottom")){ // 6, 후면도
+//                                metaDesignImage.setViewpoint(6);
+//                                metaDesignImage.setViewpointName("후면도");
+//                            } else {
+//                                metaDesignImage.setViewpoint(7);
+//                                metaDesignImage.setViewpointName("중복/추가도면");
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
 
-                    // 반복문을 통해 각 'p' 태그 처리
-                    for (int i = 0; i < pTags.getLength(); i++) {
-                        Element pTag = (Element) pTags.item(i);
-                        String id = pTag.getAttribute("id");
-                        String num = pTag.getAttribute("num");
-                        String textContent = pTag.getTextContent().trim(); // 텍스트 내용 가져오기
-
-                        num = getLastCharacter(num);
-
-                        if(currentTifFileNumber.equals(num)){
-                            if(textContent.contains("is a perspective")){ // 0, 사시도
-                                metaDesignImage.setViewpoint(0);
-                                metaDesignImage.setViewpointName("사시도");
-
-                            } else if(textContent.contains("is a front")){ // 1, 정면도
-                                metaDesignImage.setViewpoint(1);
-                                metaDesignImage.setViewpointName("정면도");
-
-                            } else if(textContent.contains("is a rear") || textContent.contains("is a back")){ // 2, 배면도
-                                metaDesignImage.setViewpoint(2);
-                                metaDesignImage.setViewpointName("배면도");
-
-                            } else if(textContent.contains("is a left side") || textContent.contains("is a left-side")){ // 3, 촤측면도
-                                metaDesignImage.setViewpoint(3);
-                                metaDesignImage.setViewpointName("촤측면도");
-
-                            } else if(textContent.contains("is a right side") || textContent.contains("is a right-side")){ // 4, 우측면도
-                                metaDesignImage.setViewpoint(4);
-                                metaDesignImage.setViewpointName("우측면도");
-
-                            } else if(textContent.contains("is a top")){ // 5, 평면도
-                                metaDesignImage.setViewpoint(5);
-                                metaDesignImage.setViewpointName("평면도");
-
-                            } else if(textContent.contains("is a bottom")){ // 6, 후면도
-                                metaDesignImage.setViewpoint(6);
-                                metaDesignImage.setViewpointName("후면도");
-                            } else {
-                                metaDesignImage.setViewpoint(7);
-                                metaDesignImage.setViewpointName("중복/추가도면");
-                            }
-                            break;
-                        }
-                    }
-                }
+                metaDesignImage.setViewpoint(null);
+                metaDesignImage.setViewpointName(null);
 
                 metaDesignImagesRepository.save(metaDesignImage);
             }
