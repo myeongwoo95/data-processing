@@ -34,6 +34,7 @@ dependencies {
 
     /* JPA */
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     /* 압축파일 */
     implementation 'org.apache.commons:commons-compress:1.21'
