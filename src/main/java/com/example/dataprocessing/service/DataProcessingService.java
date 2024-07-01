@@ -441,7 +441,7 @@ public class DataProcessingService {
 
                 metaDesignImage.setDesignSeq(savedMetaDesignInfo.getDesignSeq());
                 metaDesignImage.setImageName(tifFile.getName());
-                metaDesignImage.setImgPath(DESTINATION_PATH + folderName + "/" + tifFile.getName());
+                metaDesignImage.setImgPath(DESTINATION_PATH + "/" + folderName + "/" + tifFile.getName());
                 metaDesignImage.setImgUrl(null);
 
                 LocalDateTime now = LocalDateTime.now();
