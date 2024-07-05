@@ -50,8 +50,8 @@ public class DataProcessingService {
     private static final String A_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/A" : "/data";
     private static final String EXTRACTED_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/extracted" : "/data/extracted";
 
-    private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/data/uploads/design_images";
-    private static final String FILE_THUMBNAIL_SAVE_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_thumbnail_image" : "/data/uploads/design_thumbnail_image";
+    private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/data/uploads2/design_images";
+    private static final String FILE_THUMBNAIL_SAVE_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_thumbnail_image" : "/data/uploads2/design_thumbnail_image";
 
     // 1. 압축 해제
     public void unzip() {
