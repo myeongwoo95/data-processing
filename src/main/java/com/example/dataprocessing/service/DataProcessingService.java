@@ -1,9 +1,12 @@
 package com.example.dataprocessing.service;
 
 import com.example.dataprocessing.common.TarFileProcessor;
+import com.example.dataprocessing.domain.MetaDesignInfoImagesBulkRepository;
 import com.example.dataprocessing.domain.metaDesignImages.MetaDesignImages;
+import com.example.dataprocessing.domain.metaDesignImages.MetaDesignImagesBulkRepository;
 import com.example.dataprocessing.domain.metaDesignImages.MetaDesignImagesRepository;
 import com.example.dataprocessing.domain.metaDesignInfo.MetaDesignInfo;
+import com.example.dataprocessing.domain.metaDesignInfo.MetaDesignInfoBulkRepository;
 import com.example.dataprocessing.domain.metaDesignInfo.MetaDesignInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,8 +38,13 @@ import java.util.zip.ZipInputStream;
 public class DataProcessingService {
 
     private final TarFileProcessor tarFileProcessor;
+
     private final MetaDesignInfoRepository metaDesignInfoRepository;
     private final MetaDesignImagesRepository metaDesignImagesRepository;
+
+    private final MetaDesignInfoBulkRepository metaDesignInfoBulkRepository;
+    private final MetaDesignImagesBulkRepository metaDesignImagesBulkRepository;
+    private final MetaDesignInfoImagesBulkRepository metaDesignInfoImagesBulkRepository;
 
     private static final String UPD_ID = "vitasoft";
     private static final String A_DIR_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/A" : "/data";
@@ -76,68 +84,74 @@ public class DataProcessingService {
     }
 
     // 2. fig 이미지 중복 파일 제거
-    public void filtering() throws IOException, ParserConfigurationException, SAXException {
-        List<File> xmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
-
-        int count = 0;
-        for (File xmlFile : xmlFiles) {
-
-            // DOM 파서 생성
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-            // DTD validation 비활성화 설정
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            // XML 파일 파싱하여 Document 객체 획득
-            Document document = builder.parse(xmlFile);
-
-            // 루트 요소인 'us-patent-grant' 요소 획득
-            Element root = document.getDocumentElement();
-
-            // us-patent-grant의 'drawings' 요소 획득 (이미지 갯수)
-            Element drawings = (Element) root.getElementsByTagName("drawings").item(0);
-
-            // description 요소의 하위 요소들 중 'figure' 요소 list로 획득 후 몇개인지 count
-            NodeList figures = drawings.getElementsByTagName("figure");
-            int figureCount = figures.getLength();
-
-            // us-patent-grant의 'description' 요소 획득 (이미지 갯수)
-            Element description = (Element) root.getElementsByTagName("description").item(0);
-
-            // us-patent-grant의 'description' 요소의 하위 요소들 중 'description-of-drawings' 요소 획득 (fig 갯수)
-            Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
-
-            // descriptionOfDrawings 요소의 하위 요소들 중 'p' 요소 list로 획득 후 몇개인지 count
-            NodeList pList = descriptionOfDrawings.getElementsByTagName("p");
-            int pCount = pList.getLength();
-
-            if (figureCount == pCount) {
-                count++;
-            } else {
-                // 파일 이름을 가져오고 확장자를 제거
-                String fileNameWithoutExtension = removeExtension(xmlFile.getName());
-
-                // 폴더 경로를 생성
-                File folder = new File(DESTINATION_PATH + "/" + fileNameWithoutExtension);
-
-                // 폴더와 그 하위 내용을 삭제하는 메서드
-                deleteFolder(folder);
-            }
-        }
-
-        System.out.println("최초 폴더갯수 = " + xmlFiles.size());
-        System.out.println("fig 이미지 파일이 안겹치는 폴더 갯수 = " + count);
-
-        List<File> filteredXmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
-        System.out.println("최종 갯수 = " + filteredXmlFiles.size());
-    }
+//    public void filtering() throws IOException, ParserConfigurationException, SAXException {
+//        List<File> xmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
+//
+//        int count = 0;
+//        for (File xmlFile : xmlFiles) {
+//
+//            // DOM 파서 생성
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//
+//            // DTD validation 비활성화 설정
+//            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//            // XML 파일 파싱하여 Document 객체 획득
+//            Document document = builder.parse(xmlFile);
+//
+//            // 루트 요소인 'us-patent-grant' 요소 획득
+//            Element root = document.getDocumentElement();
+//
+//            // us-patent-grant의 'drawings' 요소 획득 (이미지 갯수)
+//            Element drawings = (Element) root.getElementsByTagName("drawings").item(0);
+//
+//            // description 요소의 하위 요소들 중 'figure' 요소 list로 획득 후 몇개인지 count
+//            NodeList figures = drawings.getElementsByTagName("figure");
+//            int figureCount = figures.getLength();
+//
+//            // us-patent-grant의 'description' 요소 획득 (이미지 갯수)
+//            Element description = (Element) root.getElementsByTagName("description").item(0);
+//
+//            // us-patent-grant의 'description' 요소의 하위 요소들 중 'description-of-drawings' 요소 획득 (fig 갯수)
+//            Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
+//
+//            // descriptionOfDrawings 요소의 하위 요소들 중 'p' 요소 list로 획득 후 몇개인지 count
+//            NodeList pList = descriptionOfDrawings.getElementsByTagName("p");
+//            int pCount = pList.getLength();
+//
+//            if (figureCount == pCount) {
+//                count++;
+//            } else {
+//                // 파일 이름을 가져오고 확장자를 제거
+//                String fileNameWithoutExtension = removeExtension(xmlFile.getName());
+//
+//                // 폴더 경로를 생성
+//                File folder = new File(DESTINATION_PATH + "/" + fileNameWithoutExtension);
+//
+//                // 폴더와 그 하위 내용을 삭제하는 메서드
+//                deleteFolder(folder);
+//            }
+//        }
+//
+//        System.out.println("최초 폴더갯수 = " + xmlFiles.size());
+//        System.out.println("fig 이미지 파일이 안겹치는 폴더 갯수 = " + count);
+//
+//        List<File> filteredXmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
+//        System.out.println("최종 갯수 = " + filteredXmlFiles.size());
+//    }
 
     // 3. DB insert
     public void insert() throws IOException, ParserConfigurationException, SAXException {
         List<File> xmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
 
-        for (File xmlFile : xmlFiles) {
+        List<MetaDesignInfo> metaDesignInfoList = new ArrayList<>();
+        List<MetaDesignImages> metaDesignImagesList = new ArrayList<>();
+
+        Long designImgSeq = 1L;
+
+        for (int i=0; i<xmlFiles.size(); i++) {
+            File xmlFile = xmlFiles.get(i);
 
             // DOM 파서 생성
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -337,9 +351,11 @@ public class DataProcessingService {
                 }
             }
 
-            // insert 코드 작성
-            MetaDesignInfo metaDesignInfo = new MetaDesignInfo();       // 2. 등록번호
-            metaDesignInfo.setRegistrationNumber(registrationNumber);   // 4. 디자인 구분 번호
+            // XML insert 코드 작성
+            MetaDesignInfo metaDesignInfo = new MetaDesignInfo();
+
+            metaDesignInfo.setDesignSeq(Long.valueOf(i+1));             // 1. 디자인 일련번호
+            metaDesignInfo.setRegistrationNumber(registrationNumber);   // 23. 디자인 구분 번호
             metaDesignInfo.setApplicationNumber(applicationNumber);     // 5. 출원번호
             metaDesignInfo.setDesignNumber(designNumber);               // 7. 디자인물품명칭,출원인
 
@@ -356,27 +372,22 @@ public class DataProcessingService {
             metaDesignInfo.setAgentAddress(agentAddress);               // 15. 대리인 주소
             metaDesignInfo.setRegistrationDate(registrationDate);       // 16. 국제등록일
 
-            // 파일명 가져오기
-            String xmlFileName = xmlFile.getName();
-
-            // 파일명에서 확장자 분리 (폴더명)
-            int dotIndex = xmlFileName.lastIndexOf('.');
+            // D00000.TIF 파일복사
+            String xmlFileName = xmlFile.getName(); // 파일명 가져오기
+            int dotIndex = xmlFileName.lastIndexOf('.'); // 파일명에서 확장자 분리 (폴더명)
             String nameWithoutExtension = xmlFileName.substring(0, dotIndex);
-
             File thumbnailFile = new File(DESTINATION_PATH + "/" + nameWithoutExtension + "/" + nameWithoutExtension + "-" + "D00000" + ".TIF");
 
             // 파일 존재 여부 확인
             if (thumbnailFile.exists()) {
-                // 복사할 파일의 새로운 경로 설정
-                Path sourcePath = thumbnailFile.toPath();
+                Path sourcePath = thumbnailFile.toPath(); // 복사할 파일의 새로운 경로 설정
                 Path targetPath = Paths.get(FILE_THUMBNAIL_SAVE_PATH, thumbnailFile.getName());
 
                 try {
-                    // 파일 복사
-                    Files.copy(sourcePath, targetPath);
-                    //System.out.println("파일이 성공적으로 복사되었습니다: " + targetPath);
+                    Files.copy(sourcePath, targetPath); // 파일 복사
+                    // System.out.println("파일이 성공적으로 복사되었습니다: " + targetPath);
                 } catch (IOException e) {
-                    System.out.println("파일 복사 중 오류가 발생했습니다: " + e.getMessage());
+                    // System.out.println("파일 복사 중 오류가 발생했습니다: " + e.getMessage());
                 }
 
                 metaDesignInfo.setImgPath(FILE_THUMBNAIL_SAVE_PATH + "/" +thumbnailFile.getName());
@@ -390,13 +401,11 @@ public class DataProcessingService {
 
             metaDesignInfo.setOpenDesignStatus(null); // xml에서 추출해야함 -> 없다면 nullable이니 null로 저장
             metaDesignInfo.setRegReferenceNumber(null); // 확인해야함
-
             metaDesignInfo.setEtc(null); // ai 측에서 update
             metaDesignInfo.setImgUrl(null);
             metaDesignInfo.setModelSeq(null);
             metaDesignInfo.setPdfPath(null);
             metaDesignInfo.setPdfUrl(null);
-
             metaDesignInfo.setSixImageInspectDate(null);
             metaDesignInfo.setSixImageInspectorId(null);
             metaDesignInfo.setThumbnailImgForm(null); // 실제로안쓴거같음
@@ -404,7 +413,8 @@ public class DataProcessingService {
             metaDesignInfo.setUpdId(null);
 
             // return 값을 받아서 사용할 수 있도록 수정
-            MetaDesignInfo savedMetaDesignInfo = metaDesignInfoRepository.save(metaDesignInfo);
+            // MetaDesignInfo savedMetaDesignInfo = metaDesignInfoRepository.save(metaDesignInfo);
+            metaDesignInfoList.add(metaDesignInfo);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // 폴더 이름 (.xml 포함)
@@ -424,44 +434,33 @@ public class DataProcessingService {
             // 현재 처리 중인 DesignSeq 값을 저장할 변수
             Long currentDesignSeq = null;
 
-            // 이미지 번호를 저장할 변수
-            Long imgNumber = 0L;
-
             // TIF 파일 리스트 반복문
-            for (File tifFile : tifFiles) {
+            for (int j=0; j<tifFiles.size(); j++) {
+                File tifFile = tifFiles.get(j);
+
                 // insert 코드 작성
                 MetaDesignImages metaDesignImage = new MetaDesignImages();
-                Long designSeq = savedMetaDesignInfo.getDesignSeq();
 
-                // 현재 처리 중인 DesignSeq가 이전과 다르면 imgNumber를 초기화
-                if (!designSeq.equals(currentDesignSeq)) {
-                    currentDesignSeq = designSeq;
-                    imgNumber = 0L;
-                }
-
-                metaDesignImage.setDesignSeq(savedMetaDesignInfo.getDesignSeq());
+                metaDesignImage.setDesignImgSeq(designImgSeq++);
+                metaDesignImage.setDesignSeq(Long.valueOf(i+1));
                 metaDesignImage.setImageName(tifFile.getName());
                 metaDesignImage.setImgPath(DESTINATION_PATH + "/" + folderName + "/" + tifFile.getName());
                 metaDesignImage.setImgUrl(null);
-
                 LocalDateTime now = LocalDateTime.now();
                 metaDesignImage.setUpdDate(now);
-
-                metaDesignImage.setImgNumber(imgNumber);
-                imgNumber++; // 이미지 번호 증가
-
+                metaDesignImage.setImgNumber(Long.valueOf(j));
                 metaDesignImage.setUpdId(UPD_ID);
                 metaDesignImage.setUseYn('Y');
 
-                // 'description' 요소 획득
-                Element description = (Element) root.getElementsByTagName("description").item(0);
-
-                // 'description-of-drawings' 요소 획득
-                Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
-
-                // 'description-of-drawings' 요소 안에 p 태그들 가져오기
-                NodeList pTags = descriptionOfDrawings.getElementsByTagName("p");
-
+//                'description' 요소 획득
+//                Element description = (Element) root.getElementsByTagName("description").item(0);
+//
+//                'description-of-drawings' 요소 획득
+//                Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
+//
+//                'description-of-drawings' 요소 안에 p 태그들 가져오기
+//                NodeList pTags = descriptionOfDrawings.getElementsByTagName("p");
+//
 //                String currentTifFileNumber = getLastCharacter(removeExtension(tifFile.getName()));
 //                if(currentTifFileNumber.equals("0")){
 //                    metaDesignImage.setViewpoint(7);
@@ -517,9 +516,16 @@ public class DataProcessingService {
                 metaDesignImage.setViewpoint(null);
                 metaDesignImage.setViewpointName(null);
 
-                metaDesignImagesRepository.save(metaDesignImage);
+                metaDesignImagesList.add(metaDesignImage);
             }
         }
+
+        System.out.println("metaDesignInfoList.size() = " + metaDesignInfoList.size());
+        System.out.println("metaDesignImagesList.size() = " + metaDesignImagesList.size());
+
+//        metaDesignInfoBulkRepository.saveAll(metaDesignInfoList);
+//        metaDesignImagesBulkRepository.saveAll(metaDesignImagesList);
+        metaDesignInfoImagesBulkRepository.saveAll(metaDesignInfoList, metaDesignImagesList);
     }
 
 
@@ -623,8 +629,6 @@ public class DataProcessingService {
         }
         Files.deleteIfExists(dir.toPath());
     }
-
-
 
     // 이름이 특정 접미사로 끝나는 폴더들을 재귀적으로 삭제하는 메소드
     private void deleteFoldersWithSuffix(File dir, String suffix) {

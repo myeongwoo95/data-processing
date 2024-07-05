@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.18'
     id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+    id 'com.google.cloud.tools.jib' version '3.1.2' // jib
 }
 
 group = 'com.example'
@@ -49,4 +50,23 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// 빌드시 plain.jar 생성 막기 (스프링부터 2.5부터는 빌드시 자동으로 plain.jar가 생성됨)
+jar {
+    enabled = false
+}
+
+jib {
+    from {
+        image = "adoptopenjdk:11-jre" // 도커라이징할 베이스 이미지 (openjdk-8-jre인가 이것도 괜찮)
+    }
+    to {
+        image = "myeongwoo95/data-processing" // 이미지가 저장될 레포지터리(repo 자동생성됨)
+        tags = ["latest"] // 태그
+    }
+
+    container {
+        jvmFlags = ["-Xms2g", "-Xmx4g"] //  Xms128m: JVM의 초기 힙 크기, Xmx128m JVM의 최대 힙 크기(초과 시 OutOfMemoryError)
+    }
 }

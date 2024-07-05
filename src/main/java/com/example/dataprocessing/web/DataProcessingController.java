@@ -27,16 +27,16 @@ public class DataProcessingController {
         return "성공";
     }
 
-    @GetMapping("/filtering")
-    public String filtering() {
-        try {
-            dataProcessingService.filtering();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "실패";
-        }
-        return "성공";
-    }
+//    @GetMapping("/filtering")
+//    public String filtering() {
+//        try {
+//            dataProcessingService.filtering();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "실패";
+//        }
+//        return "성공";
+//    }
 
     @GetMapping("/insert")
     public String insert() {
@@ -53,7 +53,6 @@ public class DataProcessingController {
     public String all() {
         try {
             dataProcessingService.unzip();
-            dataProcessingService.filtering();
             dataProcessingService.insert();
         } catch (Exception e) {
             e.printStackTrace();

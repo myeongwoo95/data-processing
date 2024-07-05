@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class MetaDesignInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DESIGN_SEQ")
     private Long designSeq;                     // 1. 시퀀스
 

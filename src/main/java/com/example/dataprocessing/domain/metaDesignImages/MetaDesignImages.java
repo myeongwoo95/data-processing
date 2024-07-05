@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class MetaDesignImages {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DESIGN_IMG_SEQ")
     private Long designImgSeq;      // 시퀀스
 
