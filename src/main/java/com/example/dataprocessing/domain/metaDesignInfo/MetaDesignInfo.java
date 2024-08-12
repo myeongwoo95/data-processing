@@ -60,6 +60,9 @@ public class MetaDesignInfo {
     @Column(name = "REGISTRATION_DATE")
     private String registrationDate;            // 16. 등록일자                 ( us-patent-grant / us-bibliographic-data-grant / us-parties / hague-agreement-data / international-registration-date / date ) [Nullable]
 
+    @Column(name = "INTERNATIONAL_DOC_NUMBER")
+    private String internationalDocNumber;      // added 240812 국제문서번호
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Column(name = "IMG_URL")

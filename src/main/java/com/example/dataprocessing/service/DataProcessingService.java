@@ -53,6 +53,10 @@ public class DataProcessingService {
     private static final String DESTINATION_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_images" : "/data/uploads/design_images";
     private static final String FILE_THUMBNAIL_SAVE_PATH = System.getProperty("os.name").startsWith("Windows") ? "C:/design_thumbnail_image" : "/data/uploads/design_thumbnail_image";
 
+    public void md(){
+
+    }
+
     // 1. 압축 해제
     public void unzip() {
         File aDir = new File(A_DIR_PATH);
@@ -84,62 +88,62 @@ public class DataProcessingService {
     }
 
     // 2. fig 이미지 중복 파일 제거
-//    public void filtering() throws IOException, ParserConfigurationException, SAXException {
-//        List<File> xmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
-//
-//        int count = 0;
-//        for (File xmlFile : xmlFiles) {
-//
-//            // DOM 파서 생성
-//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//
-//            // DTD validation 비활성화 설정
-//            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-//            DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//            // XML 파일 파싱하여 Document 객체 획득
-//            Document document = builder.parse(xmlFile);
-//
-//            // 루트 요소인 'us-patent-grant' 요소 획득
-//            Element root = document.getDocumentElement();
-//
-//            // us-patent-grant의 'drawings' 요소 획득 (이미지 갯수)
-//            Element drawings = (Element) root.getElementsByTagName("drawings").item(0);
-//
-//            // description 요소의 하위 요소들 중 'figure' 요소 list로 획득 후 몇개인지 count
-//            NodeList figures = drawings.getElementsByTagName("figure");
-//            int figureCount = figures.getLength();
-//
-//            // us-patent-grant의 'description' 요소 획득 (이미지 갯수)
-//            Element description = (Element) root.getElementsByTagName("description").item(0);
-//
-//            // us-patent-grant의 'description' 요소의 하위 요소들 중 'description-of-drawings' 요소 획득 (fig 갯수)
-//            Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
-//
-//            // descriptionOfDrawings 요소의 하위 요소들 중 'p' 요소 list로 획득 후 몇개인지 count
-//            NodeList pList = descriptionOfDrawings.getElementsByTagName("p");
-//            int pCount = pList.getLength();
-//
-//            if (figureCount == pCount) {
-//                count++;
-//            } else {
-//                // 파일 이름을 가져오고 확장자를 제거
-//                String fileNameWithoutExtension = removeExtension(xmlFile.getName());
-//
-//                // 폴더 경로를 생성
-//                File folder = new File(DESTINATION_PATH + "/" + fileNameWithoutExtension);
-//
-//                // 폴더와 그 하위 내용을 삭제하는 메서드
-//                deleteFolder(folder);
-//            }
-//        }
-//
-//        System.out.println("최초 폴더갯수 = " + xmlFiles.size());
-//        System.out.println("fig 이미지 파일이 안겹치는 폴더 갯수 = " + count);
-//
-//        List<File> filteredXmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
-//        System.out.println("최종 갯수 = " + filteredXmlFiles.size());
-//    }
+    public void filtering() throws IOException, ParserConfigurationException, SAXException {
+        List<File> xmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
+
+        int count = 0;
+        for (File xmlFile : xmlFiles) {
+
+            // DOM 파서 생성
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+            // DTD validation 비활성화 설정
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // XML 파일 파싱하여 Document 객체 획득
+            Document document = builder.parse(xmlFile);
+
+            // 루트 요소인 'us-patent-grant' 요소 획득
+            Element root = document.getDocumentElement();
+
+            // us-patent-grant의 'drawings' 요소 획득 (이미지 갯수)
+            Element drawings = (Element) root.getElementsByTagName("drawings").item(0);
+
+            // description 요소의 하위 요소들 중 'figure' 요소 list로 획득 후 몇개인지 count
+            NodeList figures = drawings.getElementsByTagName("figure");
+            int figureCount = figures.getLength();
+
+            // us-patent-grant의 'description' 요소 획득 (이미지 갯수)
+            Element description = (Element) root.getElementsByTagName("description").item(0);
+
+            // us-patent-grant의 'description' 요소의 하위 요소들 중 'description-of-drawings' 요소 획득 (fig 갯수)
+            Element descriptionOfDrawings = (Element) description.getElementsByTagName("description-of-drawings").item(0);
+
+            // descriptionOfDrawings 요소의 하위 요소들 중 'p' 요소 list로 획득 후 몇개인지 count
+            NodeList pList = descriptionOfDrawings.getElementsByTagName("p");
+            int pCount = pList.getLength();
+
+            if (figureCount == pCount) {
+                count++;
+            } else {
+                // 파일 이름을 가져오고 확장자를 제거
+                String fileNameWithoutExtension = removeExtension(xmlFile.getName());
+
+                // 폴더 경로를 생성
+                File folder = new File(DESTINATION_PATH + "/" + fileNameWithoutExtension);
+
+                // 폴더와 그 하위 내용을 삭제하는 메서드
+                deleteFolder(folder);
+            }
+        }
+
+        System.out.println("최초 폴더갯수 = " + xmlFiles.size());
+        System.out.println("fig 이미지 파일이 안겹치는 폴더 갯수 = " + count);
+
+        List<File> filteredXmlFiles = getXmlFilesFromFolders(DESTINATION_PATH);
+        System.out.println("최종 갯수 = " + filteredXmlFiles.size());
+    }
 
     // 3. DB insert
     public void insert() throws IOException, ParserConfigurationException, SAXException {
@@ -351,6 +355,31 @@ public class DataProcessingService {
                 }
             }
 
+            // 240812 international doc-number 추가 e.g. DM/087143
+            // priority-claims 요소 획득
+            Element priorityClaims = (Element) bibliographicData.getElementsByTagName("priority-claims").item(0);
+            String priorityClaimDocNumber = null;
+
+            if (priorityClaims != null) {
+                // priority-claim 요소 획득
+                Element priorityClaim = (Element) priorityClaims.getElementsByTagName("priority-claim").item(0);
+
+                if(priorityClaim != null) {
+                    if (priorityClaim.getAttribute("kind").equals("international")) {
+                        // doc-number 요소 획득
+                        Element docNumber = (Element) priorityClaim.getElementsByTagName("doc-number").item(0);
+                        if(docNumber != null) {
+
+                            // 'doc-number' 요소의 값 추출
+                            NodeList docNumberList = priorityClaim.getElementsByTagName("doc-number");
+                            if (docNumberList.getLength() > 0) {
+                                priorityClaimDocNumber = docNumberList.item(0).getTextContent();
+                            }
+                        }
+                    }
+                }
+            }
+
             // XML insert 코드 작성
             MetaDesignInfo metaDesignInfo = new MetaDesignInfo();
 
@@ -371,6 +400,8 @@ public class DataProcessingService {
             metaDesignInfo.setAgentName(agentName);                     // 14. 대리인 이름
             metaDesignInfo.setAgentAddress(agentAddress);               // 15. 대리인 주소
             metaDesignInfo.setRegistrationDate(registrationDate);       // 16. 국제등록일
+            metaDesignInfo.setInternationalDocNumber(priorityClaimDocNumber); // added 240812 국제 문서 번호
+
 
             // D00000.TIF 파일복사
             String xmlFileName = xmlFile.getName(); // 파일명 가져오기

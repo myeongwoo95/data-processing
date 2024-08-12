@@ -24,7 +24,7 @@ public class MetaDesignImagesBulkRepository {
 
         jdbcTemplate.batchUpdate(sql,
                 metaDesignImagesList,
-                metaDesignImagesList.size(),
+                1000,
 //                (PreparedStatement ps, MetaDesignImages metaDesignImages) -> {
 //                    ps.setLong(1, metaDesignImages.getDesignImgSeq());
 //                    ps.setLong(2, metaDesignImages.getDesignSeq());

@@ -20,8 +20,8 @@ public class MetaDesignInfoImagesBulkRepository {
     @Transactional
     public void saveAll(List<MetaDesignInfo> MetaDesignInfoList, List<MetaDesignImages> metaDesignImagesList) {
 
-        String sql1 = "INSERT INTO meta_design_info (DESIGN_SEQ, AGENT_ADDRESS, AGENT_NAME, APPLICANT_ADDRESS, APPLICANT_NAME, APPLICATION_NUMBER, ARTICLE_NAME, CLASS_CODE, CLASS_CODE_INT, DESIGN_NUMBER, ETC, IMG_PATH, IMG_URL, LAST_RIGHT_HOLDER_ADDRESS, LAST_RIGHT_HOLDER_NAME, MANAGEMENT_YEAR, MODEL_SEQ, OPEN_DESIGN_STATUS, PDF_PATH, PDF_URL, REG_REFERENCE_NUMBER, REGISTRATION_DATE, REGISTRATION_NUMBER, SIX_IMAGE_INSPECT_DATE, SIX_IMAGE_INSPECTOR_ID, THUMBNAIL_IMG_FORM, UPD_DATE, UPD_ID)"+
-                "VALUES (?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)";
+        String sql1 = "INSERT INTO meta_design_info (DESIGN_SEQ, AGENT_ADDRESS, AGENT_NAME, APPLICANT_ADDRESS, APPLICANT_NAME, APPLICATION_NUMBER, ARTICLE_NAME, CLASS_CODE, CLASS_CODE_INT, DESIGN_NUMBER, ETC, IMG_PATH, IMG_URL, LAST_RIGHT_HOLDER_ADDRESS, LAST_RIGHT_HOLDER_NAME, MANAGEMENT_YEAR, MODEL_SEQ, OPEN_DESIGN_STATUS, PDF_PATH, PDF_URL, REG_REFERENCE_NUMBER, REGISTRATION_DATE, REGISTRATION_NUMBER, SIX_IMAGE_INSPECT_DATE, SIX_IMAGE_INSPECTOR_ID, THUMBNAIL_IMG_FORM, UPD_DATE, UPD_ID, INTERNATIONAL_DOC_NUMBER)"+
+                "VALUES (?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?)";
 
         String sql2 = "INSERT INTO meta_design_images (DESIGN_IMG_SEQ, DESIGN_SEQ, IMAGE_NAME, IMAGE_NUMBER, IMAGE_PATH, IMAGE_URL, UPD_DATE, UPD_ID, USE_YN, VIEWPOINT, VIEWPOINT_NAME)"+
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -196,6 +196,12 @@ public class MetaDesignInfoImagesBulkRepository {
                         ps.setString(28, metaDesignInfo.getUpdId());
                     } else {
                         ps.setNull(28, Types.VARCHAR);
+                    }
+
+                    if (metaDesignInfo.getInternationalDocNumber() != null) {
+                        ps.setString(29, metaDesignInfo.getInternationalDocNumber());
+                    } else {
+                        ps.setNull(29, Types.VARCHAR);
                     }
                 });
 
