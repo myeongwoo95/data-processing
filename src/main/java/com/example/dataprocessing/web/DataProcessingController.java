@@ -22,8 +22,13 @@ public class DataProcessingController {
     private final DataProcessingService dataProcessingService;
     private final MetaDesignInfoRepository metaDesignInfoRepository;
 
+    @GetMapping("/health-check")
+    public String healthCheck(){
+        return "it works!";
+    }
+
     // 유미고객건으로 정제에 필요없음
-    @GetMapping("/modifyXml")
+//    @GetMapping("/modifyXml")
     public String ModifyXmls() {
 
         String filePath = "C:\\Users\\walle\\Downloads\\US디자인등록건_유미고객_7746.xlsx";
@@ -92,11 +97,6 @@ public class DataProcessingController {
         System.out.println("수정 완료 개수: " + modifiedCount + "개");
         System.out.println("X로 수정된 개수: " + modifiedX + "개");
         return "성공";
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "it works!";
     }
 
     @GetMapping("/unzip")

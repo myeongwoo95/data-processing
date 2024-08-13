@@ -4,11 +4,13 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3308/test?serverTimezone=Asia/Seoul?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
+#    url: ${DB_URL}
+    url: jdbc:mariadb://172.17.0.1:3306/test?serverTimezone=Asia/Seoul?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
     username: root
     password: 1234
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
       naming:
@@ -17,6 +19,7 @@ spring:
       hibernate:
         show_sql: false
         format_sql: true
+
 
 logging:
   level:
